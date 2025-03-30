@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DIY Club</title>
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Raleway', sans-serif;
+      transition: background 0.5s ease, color 0.5s ease;
+      background: #fff;
+      scroll-behavior: smooth;
+    }
+    
+    a { 
+      text-decoration: none; 
+      color: inherit; 
+    }
+    
+    /* Theme Toggle */
+    .dark-theme { 
+      background: linear-gradient(135deg, #444, #222); 
+      color: #f0f0f0; 
+    }
+    
+    .dark-theme .testimonials {
+      background: #333;
+      color: #f0f0f0;
+    }
+    
+    .dark-theme .contact-form input,
+    .dark-theme .contact-form textarea {
+      background: #444;
+      color: #f0f0f0;
+      border-color: #555;
+    }
+    
+    #theme-toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      z-index: 1000;
+    }
+    
+    #theme-toggle:hover { 
+      background: rgba(0, 0, 0, 0.8); 
+    }
+    
+    /* Live Event Banner */
+    #live-event-banner {
+      display: none;
+      text-align: center;
+      padding: 15px;
+      background: linear-gradient(90deg, #ff0000, #ff6600);
+      color: white;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #live-event-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: skewX(-30deg);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      100% {
+        left: 150%;
+      }
+    }
+    
+    #live-event-banner a {
+      color: yellow;
+      text-decoration: underline;
+      margin-left: 10px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    
+    #live-event-banner a:hover {
+      color: white;
+    }
+    
+    /* Header & Navigation */
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    
+    .logo { 
+      width: 120px; 
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.1);
+    }
+    
+    nav {
+      margin-top: 20px;
+    }
+    
+    nav ul { 
+      list-style: none; 
+      padding: 0; 
+      margin: 20px 0 0; 
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    nav ul li { 
+      margin: 0 15px;
+      position: relative;
+    }
+    
+    nav ul li a {
+      display: block;
+      padding: 5px 0;
+      position: relative;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: rgb(210, 154, 23);
+      transition: width 0.3s ease;
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    
+    /* Sections */
+    section { 
+      padding: 80px 20px; 
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    section h2 {
+      margin-bottom: 30px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: rgb(210, 154, 23);
+    }
+    
+    /* Buttons */
+    button {
+      padding: 12px 25px;
+      background: rgb(210, 154, 23);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+    
+    button:hover { 
+      background: #0056b3; 
+      transform: translateY(-3px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    /* Event Countdown */
+    .countdown-container {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+    }
+    
+    .countdown-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 15px;
+      min-width: 80px;
+    }
+    
+    .countdown-value {
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: rgba(210, 154, 23, 0.8);
+      color: white;
+      border-radius: 5px;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    
+    .countdown-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+    
+    /* Events Section */
+    .event-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+    
+    .event {
+      width: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .event:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .event img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .event-info {
+      padding: 20px;
+    }
+    
+    .event-info h3 {
+      margin-bottom: 10px;
+    }
+    
+    /* Gallery Section */
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 40px;
+    }
+    
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 80%;
+    }
+    
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+    
+    /* Testimonials Section */
+    .testimonials {
+      width: 80%;
+      margin: auto;
+      text-align: center;
+      padding: 30px;
+      background: white;
+      color: black;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    
+    .testimonial-container {
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .testimonial-slide {
+      display: none;
+      padding: 20px;
+      transition: opacity 0.5s ease;
+    }
+    
+    .testimonial-slide.active {
+      display: block;
+      font-size: 18px;
+    }
+    
+    .testimonial-slide p {
+      margin-bottom: 15px;
+    }
+    
+    .testimonial-author {
+      font-weight: bold;
+      font-style: italic;
+    }
+    
+    .testimonial-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .testimonial-btn {
+      background: rgba(210, 154, 23, 0.7);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 10px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+    
+    .testimonial-btn:hover {
+      background: rgb(210, 154, 23);
+    }
+    
+    .testimonial-indicators {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .indicator.active {
+      background: rgb(210, 154, 23);
+    }
+    
+    /* Social Media Icons */
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .social-icons a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .social-icons a img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 5px;
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .social-icons a:hover img {
+      transform: scale(1.2) rotate(5deg);
+    }
+    
+    /* Contact Form */
+    .contact-form {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      text-align: left;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Raleway', sans-serif;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: rgb(210, 154, 23);
+      outline: none;
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .error-message {
+      color: #ff3333;
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: left;
+      display: none;
+    }
+    
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 50px;
+    }
+    
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      max-width: 1200px;
+      margin: 0 auto 30px;
+    }
+    
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+      margin: 15px;
+      text-align: left;
+    }
+    
+    .footer-section h3 {
+      margin-bottom: 15px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: rgb(210, 154, 23);
+    }
+    
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: rgb(210, 154, 23);
+    }
+    
+    .copyright {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: rgb(210, 154, 23);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s, background 0.3s;
+      z-index: 100;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      background: #0056b3;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      nav {
+        display: none;
+      }
+      
+      nav.active {
+        display: block;
+      }
+      
+      .countdown-container {
+        flex-wrap: wrap;
+      }
+      
+      .countdown-box {
+        margin: 10px;
+      }
+      
+      .testimonials {
+        width: 95%;
+      }
+      
+      .contact-form {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="live-event-banner">
+    🔴 LIVE EVENT: 🎉 DIY Mega Fest 2K25 – Registration Open! 🚀
+    <a href="https://forms.gle/YLK9v2Zj2A5hZaEQ6" target="_blank">Join Now</a>
+  </div>
+  
+  <button id="theme-toggle" aria-label="Toggle dark mode">
+    <span id="theme-icon">🌙</span>
+  </button>
+  
+  <header>
+    <img src="logo.jpg" alt="DIY Club Logo" class="logo" />
+    <h1>Welcome to DIY Club</h1>
+    <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+    <nav id="main-nav">
+      <ul>
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#upcoming-events" class="nav-link">Upcoming Events</a></li>
+        <li><a href="#events" class="nav-link">Past Events</a></li>
+        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <section id="home" class="section">
+    <h2>Discover. Create. Inspire.</h2>
+    <p>Join us in bringing creativity to life with exciting DIY projects.</p>
+    <a href="https://chat.whatsapp.com/KmpkDfXFJ9nJK8RuV3aKYQ" target="_blank">
+      <button>Join Us</button>
+    </a>
+  </section>
+  
+  <section id="upcoming-events" class="section">
+    <h2>Upcoming Event</h2>
+    <h3>DIY Mega Fest 2K25</h3>
+    <p>Get ready for the biggest DIY event of the year! Join us for workshops, competitions, and more.</p>
+    
+    <div class="countdown-container">
+      <div class="countdown-box">
+        <div id="days" class="countdown-value">00</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-box">
+        <div id="hours" class="countdown-value">00</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-box">
+        <div id="minutes" class="countdown-value">00</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-box">
+        <div id="seconds" class="countdown-value">00</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+    
+    <a href="https://forms.gle/YLK9v2Zj2A5hZaEQ6" target="_blank">
+      <button>Register Now</button>
+    </a>
+  </section>
+
+  <section id="events" class="section">
+    <h2>Past Events</h2>
+    <div class="event-container">
+      <div class="event">
+        <img src="event1.jpg" alt="DIY Workshop Event">
+        <div class="event-info">
+          <h3>Innovative Cookery Competition</h3>
+          <p>A fun event showcasing creative and delicious recipes!</p>
+          <button class="view-details-btn" data-event="event1">View Details</button>
+        </div>
+      </div>
+      <div class="event">
+        <img src="event2.jpg" alt="Recycled Art Exhibition">
+        <div class="event-info">
+          <h3>Recycled Art Exhibition</h3>
+          <p>Art pieces created from upcycled materials.</p>
+          <button class="view-details-btn" data-event="event2">View Details</button>
+        </div>
+      </div>
+      <div class="event">
+        <img src="event3.jpg" alt="DIY Workshop">
+        <div class="event-info">
+          <h3>Navratri-inspired Craft</h3>
+          <p>Learn to create beautiful home decorations from everyday items.</p>
+          <button class="view-details-btn" data-event="event3">View Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="section">
+    <h2>Gallery</h2>
+    <div class="gallery-container">
+      <div class="gallery-item">
+        <img src="photo1.jpg" alt="Gallery Image 1" data-lightbox="gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="photo2.jpg" alt="Gallery Image 2" data-lightbox="gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="photo3.jpg" alt="Gallery Image 3" data-lightbox="gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="photo4.jpg" alt="Gallery Image 4" data-lightbox="gallery">
+      </div>
+      <div class="gallery-item">
+        <img src="photo5.jpg" alt="Gallery Image 5" data-lightbox="gallery">
+      </div>
+    </div>
+    
+    <!-- Lightbox -->
+    <div class="lightbox">
+      <span class="lightbox-close">&times;</span>
+      <div class="lightbox-content">
+        <img src="/placeholder.svg" alt="Lightbox Image">
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <h2>About DIY Club</h2>
+    <p>We are a passionate community of innovators who love to create, build, and explore DIY projects.
+      The DIY Club at GH Raisoni College of Engineering & Management (GHRCEM), Pune is a creative and technical community that helps students enhance their skills through hands-on projects.</p>
+    <p><strong>Mission:</strong> The club focuses on innovation, collaboration, and skill development by offering a platform for students to explore their passions.</p>
+    
+    <div class="about-features" style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 40px; gap: 30px;">
+      <div class="feature" style="flex: 1; min-width: 250px; max-width: 300px; padding: 20px; background: rgba(210, 154, 23, 0.1); border-radius: 10px;">
+        <h3>Workshops</h3>
+        <p>Regular hands-on workshops to learn new skills and techniques.</p>
+      </div>
+      <div class="feature" style="flex: 1; min-width: 250px; max-width: 300px; padding: 20px; background: rgba(210, 154, 23, 0.1); border-radius: 10px;">
+        <h3>Competitions</h3>
+        <p>Exciting competitions to showcase your creativity and win prizes.</p>
+      </div>
+      <div class="feature" style="flex: 1; min-width: 250px; max-width: 300px; padding: 20px; background: rgba(210, 154, 23, 0.1); border-radius: 10px;">
+        <h3>Community</h3>
+        <p>A supportive community of like-minded individuals to collaborate with.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="section">
+    <h2>Testimonials</h2>
+    <div class="testimonials">
+      <div class="testimonial-container">
+        <div class="testimonial-slide active">
+          <p>"The DIY Club has been an amazing platform for me to explore my creativity and learn new skills. The workshops are incredibly informative and fun!"</p>
+          <div class="testimonial-author">- Aditi, Computer Science</div>
+        </div>
+        <div class="testimonial-slide">
+          <p>"I've attended several DIY Club events and each one has been better than the last. The hands-on approach to learning is exactly what I needed!"</p>
+          <div class="testimonial-author">- Rohan, Mechanical Engineering</div>
+        </div>
+        <div class="testimonial-slide">
+          <p>"The DIY Club organizes the most innovative and fun events on campus. I've made great friends and learned valuable skills that will help me in my career."</p>
+          <div class="testimonial-author">- Neha, Electronics</div>
+        </div>
+      </div>
+      
+      <div class="testimonial-controls">
+        <button class="testimonial-btn prev-btn" aria-label="Previous testimonial">&#10094;</button>
+        <button class="testimonial-btn next-btn" aria-label="Next testimonial">&#10095;</button>
+      </div>
+      
+      <div class="testimonial-indicators">
+        <span class="indicator active" data-index="0"></span>
+        <span class="indicator" data-index="1"></span>
+        <span class="indicator" data-index="2"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <h2>Contact Us</h2>
+    
+    <div class="contact-form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Your Name">
+        <div class="error-message" id="name-error">Please enter your name</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Your Email">
+        <div class="error-message" id="email-error">Please enter a valid email</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Your Message"></textarea>
+        <div class="error-message" id="message-error">Please enter your message</div>
+      </div>
+      
+      <button id="submit-form">Send Message</button>
+    </div>
+    
+    <p>Stay connected with us on social media:</p>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/raisoni_diy/" target="_blank">
+        <img src="Instagram_icon.png" alt="Instagram">
+        <span>Instagram</span>
+      </a>
+      <a href="https://www.linkedin.com/posts/diyclub_ghrcemabrpune-diyabrghrcem-diy-activity-7243590326412603392-A02H?utm_source=share&utm_medium=member_android" target="_blank">
+        <img src="LinkedIn_logo_initials.png" alt="LinkedIn">
+        <span>LinkedIn</span>
+      </a>
+      
+    </div>
+  </section>
+  
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#events">Events</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>Name: Gagan Tawari (President) </p>
+        <p>Email: diyclub@ghrcem.edu.in</p>
+        <p>Phone: +91 8080071083</p>
+        <p>Address: GH Raisoni College of Engineering & Management, Pune</p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <ul class="footer-links">
+          <li><a href="https://www.instagram.com/raisoni_diy/" target="_blank">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/posts/diyclub_ghrcemabrpune-diyabrghrcem-diy-activity-7243590326412603392-A02H?utm_source=share&utm_medium=member_android" target="_blank">LinkedIn</a></li>
+          <li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>&copy; 2025 DIY Club. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <div class="back-to-top" id="back-to-top" aria-label="Back to top">↑</div>
+  
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+      if (document.body.classList.contains('dark-theme')) {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+    
+    // Check for saved theme preference
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        themeIcon.textContent = '☀️';
+      }
+      
+      themeToggle.addEventListener('click', toggleTheme);
+    });
+    
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mainNav = document.getElementById('main-nav');
+    
+    mobileMenuBtn.addEventListener('click', function() {
+      mainNav.classList.toggle('active');
+    });
+    
+    // Smooth Scrolling for Navigation
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Close mobile menu if open
+        mainNav.classList.remove('active');
+        
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        
+        window.scrollTo({
+          top: targetSection.offsetTop - 70,
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // Event Banner
+    document.addEventListener('DOMContentLoaded', function() {
+      const eventBanner = document.getElementById('live-event-banner');
+      eventBanner.style.display = 'block';
+    });
+    
+    // Countdown Timer
+    function updateCountdown() {
+      // Set the date we're counting down to (example: December 31, 2025)
+      const countdownDate = new Date('April 7, 2025 00:00:00').getTime();
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+      
+      // Time calculations
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      // Display the result
+      document.getElementById('days').textContent = days.toString().padStart(2, '0');
+      document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+      
+      // If the countdown is finished, display a message
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+      }
+    }
+    
+    // Update the countdown every 1 second
+    updateCountdown();
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    
+    // Testimonials Carousel
+    let testimonialIndex = 0;
+    const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    function showTestimonial(index) {
+      testimonialSlides.forEach(slide => slide.classList.remove('active'));
+      indicators.forEach(indicator => indicator.classList.remove('active'));
+      
+      testimonialSlides[index].classList.add('active');
+      indicators[index].classList.add('active');
+      testimonialIndex = index;
+    }
+    
+    // Manual navigation
+    prevBtn.addEventListener('click', function() {
+      let newIndex = testimonialIndex - 1;
+      if (newIndex < 0) newIndex = testimonialSlides.length - 1;
+      showTestimonial(newIndex);
+    });
+    
+    nextBtn.addEventListener('click', function() {
+      let newIndex = testimonialIndex + 1;
+      if (newIndex >= testimonialSlides.length) newIndex = 0;
+      showTestimonial(newIndex);
+    });
+    
+    // Indicator clicks
+    indicators.forEach(indicator => {
+      indicator.addEventListener('click', function() {
+        const index = parseInt(this.getAttribute('data-index'));
+        showTestimonial(index);
+      });
+    });
+    
+    // Auto slide
+    function autoSlideTestimonials() {
+      let newIndex = testimonialIndex + 1;
+      if (newIndex >= testimonialSlides.length) newIndex = 0;
+      showTestimonial(newIndex);
+    }
+    
+    let testimonialInterval = setInterval(autoSlideTestimonials, 5000);
+    
+    // Pause auto-slide on hover
+    const testimonialsContainer = document.querySelector('.testimonials');
+    testimonialsContainer.addEventListener('mouseenter', function() {
+      clearInterval(testimonialInterval);
+    });
+    
+    testimonialsContainer.addEventListener('mouseleave', function() {
+      testimonialInterval = setInterval(autoSlideTestimonials, 5000);
+    });
+    
+    // Gallery Lightbox
+    const galleryItems = document.querySelectorAll('[data-lightbox="gallery"]');
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxClose = document.querySelector('.lightbox-close');
+    
+    galleryItems.forEach(item => {
+      item.addEventListener('click', function() {
+        lightboxImg.src = this.src;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+      });
+    });
+    
+    lightboxClose.addEventListener('click', function() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = ''; // Re-enable scrolling
+    });
+    
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Form Validation
+    const contactForm = document.querySelector('.contact-form');
+    const submitBtn = document.getElementById('submit-form');
+    
+    submitBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      let isValid = true;
+      
+      // Name validation
+      const nameInput = document.getElementById('name');
+      const nameError = document.getElementById('name-error');
+      
+      if (nameInput.value.trim() === '') {
+        nameError.style.display = 'block';
+        isValid = false;
+      } else {
+        nameError.style.display = 'none';
+      }
+      
+      // Email validation
+      const emailInput = document.getElementById('email');
+      const emailError = document.getElementById('email-error');
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!emailPattern.test(emailInput.value)) {
+        emailError.style.display = 'block';
+        isValid = false;
+      } else {
+        emailError.style.display = 'none';
+      }
+      
+      // Message validation
+      const messageInput = document.getElementById('message');
+      const messageError = document.getElementById('message-error');
+      
+      if (messageInput.value.trim() === '') {
+        messageError.style.display = 'block';
+        isValid = false;
+      } else {
+        messageError.style.display = 'none';
+      }
+      
+      // If form is valid, submit it (or show success message)
+      if (isValid) {
+        alert('Thank you for your message! We will get back to you soon.');
+        contactForm.reset();
+      }
+    });
+    
+    // Scroll Reveal Animation
+    function revealSections() {
+      const sections = document.querySelectorAll('.section');
+      
+      sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        
+        if (sectionTop < windowHeight - 100) {
+          section.classList.add('visible');
+        }
+      });
+    }
+    
+    // Initial check on page load
+    window.addEventListener('DOMContentLoaded', revealSections);
+    
+    // Check on scroll
+    window.addEventListener('scroll', revealSections);
+    
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+    
+    backToTopBtn.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Event Details Modal
+    const eventButtons = document.querySelectorAll('.view-details-btn');
+    
+    eventButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const eventId = this.getAttribute('data-event');
+        let eventDetails = '';
+        
+        // Get event details based on ID
+        switch(eventId) {
+          case 'event1':
+            eventDetails = 'The Innovative Cookery Competition was held on March 15, 2025. Over 50 participants showcased their culinary skills with creative recipes using sustainable ingredients.';
+            break;
+          case 'event2':
+            eventDetails = 'The Recycled Art Exhibition featured amazing artwork created from recycled materials. The event raised awareness about sustainability and creative reuse of waste materials.';
+            break;
+          case 'event3':
+            eventDetails = 'Our taught participants how to create beautiful decorations for their homes using everyday items. The workshop was led by professional interior designers.';
+            break;
+        }
+        
+        alert(eventDetails);
+      });
+    });
+  </script>
+</body>
+</html>
